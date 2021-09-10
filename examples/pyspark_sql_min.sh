@@ -3,6 +3,7 @@ val df = spark.read.option("header", true).csv("/home/lukas/spark/data/hotels_ba
 df.registerTempTable("hotels")
 val sqlcontext = new org.apache.spark.sql.SQLContext(sc)
 sqlcontext.sql("SELECT * FROM hotels").show()
+sqlcontext.sql("SELECT * FROM hotels WHERE price > 500 SKYLINE OF price MIN").show
 sqlcontext.sql("SELECT * FROM hotels WHERE price > 500 SKYLINE OF price MIN ORDER BY distance DESC, price ASC").explain
 sqlcontext.sql("SELECT * FROM hotels WHERE price > 500 SKYLINE OF price MIN ORDER BY distance DESC, price ASC").explain("extended")
 
@@ -24,6 +25,7 @@ val sqlcontext = new org.apache.spark.sql.SQLContext(sc)
 sqlcontext.sql("SELECT * FROM hotels").show()
 sqlcontext.sql("SELECT * FROM hotels SKYLINE OF price MIN, distance MIN").show
 sqlcontext.sql("SELECT * FROM hotels SKYLINE OF price MIN, distance MIN").explain("extended")
+sqlcontext.sql("SELECT * FROM hotels SKYLINE OF price MIN, distance MIN").queryExecution.debug.codegen
 
 # skyline and filter + order
 val df = spark.read.option("header", true).csv("/home/lukas/spark/data/hotels_bahamas_min.csv")

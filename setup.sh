@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SPARK_VERSION="3.1.2"
-SPARK_DOWNLOAD_URL="https://github.com/apache/spark.git"
+SPARK_DOWNLOAD_URL="https://github.com/Lukas-Grasmann/Spark_3.1.2_Skyline.git"
 
 cwd=$(pwd)
 
@@ -82,20 +82,13 @@ then
 
     sudo apt install python3-setuptools -y
 
-    echo "##############################"
-    echo "# Removing old Spark folders #"
-    echo "##############################"
-
-    sudo rm -rf spark
-    sudo rm -rf spark-*
-
     echo "############################"
     echo "# Downloading Apache Spark #"
     echo "############################"
 
-    git clone --depth 1 --branch "v${SPARK_VERSION}" "${SPARK_DOWNLOAD_URL}"
+    git clone --branch "skyline_master" "${SPARK_DOWNLOAD_URL}"
 
-    mv "spark" "spark-${SPARK_VERSION}"
+    mv "Spark_${SPARK_VERSION}_Skyline" "spark-${SPARK_VERSION}"
 
 fi
 
@@ -122,7 +115,7 @@ then
     echo "# Building Spark (SBT) #"
     echo "########################"
 
-    ./build/sbt clean package
+    ./build/sbt package
 
 fi
 

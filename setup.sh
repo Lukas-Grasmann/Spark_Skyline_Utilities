@@ -129,7 +129,8 @@ then
     echo "# Building runnable Spark #"
     echo "###########################"
 
-    ./dev/make-distribution.sh --name custom-spark --pip --tgz -Phive -Phive-thriftserver -Pmesos -Pyarn -Pkubernetes
+    ./dev/make-distribution.sh --name skyline-spark --pip --r --tgz -Psparkr -Phive -Phive-thriftserver -Pmesos -Pyarn -Dhadoop.version=3.3.0 -Pkubernetes
+    # ./dev/make-distribution.sh --name skyline-spark --pip --tgz -Phive -Phive-thriftserver -Pmesos -Pyarn -Pkubernetes
 
 fi
 

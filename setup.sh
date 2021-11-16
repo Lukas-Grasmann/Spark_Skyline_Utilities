@@ -129,9 +129,13 @@ then
     echo "# Building runnable Spark #"
     echo "###########################"
 
-    ./dev/make-distribution.sh --name skyline-spark --pip --r --tgz -Psparkr -Phive -Phive-thriftserver -Pmesos -Pyarn -Dhadoop.version=3.3.0 -Pkubernetes
-    # ./dev/make-distribution.sh --name skyline-spark --pip --tgz -Phive -Phive-thriftserver -Pmesos -Pyarn -Pkubernetes
+    sudo Rscript -e 'install.packages(c("knitr", "devtools", "testthat", "rmarkdown"), repos="https://cloud.r-project.org/")'
+    sudo Rscript -e 'devtools::install_version("roxygen2", version = "7.1.1", repos="https://cloud.r-project.org/")'
 
+    sudo Rscript -e 'install.packages(c("e1041", "qpdf"), repos="https://cloud.r-project.org/")'
+    
+    ./dev/make-distribution.sh --name skyline-spark --pip --r --tgz -Psparkr -Phive -Phive-thriftserver -Pmesos -Pyarn -Dhadoop.version=3.0.0 -Pkubernetes
+    
 fi
 
 if [[ $1 == "jekyll" ]]

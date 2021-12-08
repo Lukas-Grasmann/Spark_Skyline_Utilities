@@ -14,8 +14,8 @@
 
 database="benchmarks"
 
-run_args="--master local[4] --conf spark.sql.catalogImplementation=hive --conf spark.sql.warehouse.dir=/home/lukas/test_cases_updated/benchmarks/spark-warehouse"
-# run_args="--master spark://lukas-VirtualBox:7077 --conf spark.sql.catalogImplementation=hive"
+# run_args="--conf spark.sql.catalogImplementation=hive --conf spark.sql.warehouse.dir=/home/lukas/test_cases_updated/benchmarks/spark-warehouse"
+run_args="--master spark://url:7077 --conf spark.sql.catalogImplementation=hive --conf driver-memory=16g"
 
 algorithms=("bnl" "dist" "dist_inc")
 datasets_complete=("airbnb" "fueleconomy" "coil2000" "nba")
@@ -254,15 +254,15 @@ do
 
                 output_path=$(realpath ${output_folder}/${filename}.out)
 
-        touch ${output_path}
+                touch ${output_path}
 
-        /.${SPARK_HOME}/bin/spark-sql \
-            ${run_args} \
-            --executor-cores ${nodes} \
-            -f ${absolute_path} \
-            &> ${output_path}
+                /.${SPARK_HOME}/bin/spark-sql \
+                    ${run_args} \
+                    --executor-cores ${nodes} \
+                    -f ${absolute_path} \
+                    &> ${output_path}
 
-        echo "ok"
+                echo "ok"
             done
         done
     done

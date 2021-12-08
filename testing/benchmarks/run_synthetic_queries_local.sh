@@ -14,8 +14,7 @@
 
 database="benchmarks"
 
-# run_args="--conf spark.sql.catalogImplementation=hive --conf spark.sql.warehouse.dir=/home/lukas/test_cases_updated/benchmarks/spark-warehouse"
-run_args="--master spark://url:7077 --conf spark.sql.catalogImplementation=hive --conf driver-memory=16g"
+run_args="--master local[4] --conf spark.sql.catalogImplementation=hive"
 
 algorithms=("bnl" "dist" "dist_inc")
 datasets_complete=("store_sales_10 store_sales_20 store_sales_50")
@@ -64,7 +63,7 @@ do
     for dataset in ${datasets_complete[@]}
     do
         for dimension in ${num_dimensions[@]}
-        do
+        do  
             filename=reference-${dataset}-${tuples[${dataset}]}t-${dimension}d-${nodes}n.sql
             creation_path=${destination_folder}/${filename}
             absolute_path=$(realpath ${creation_path})
@@ -73,7 +72,7 @@ do
             minmaxlist=(${minmaxdiff[${dataset}]})
 
             echo -n "creating ${filename} ... "
-
+            
             touch $creation_path
 
             sql_query="SELECT \* FROM ${database}.${dataset} AS o WHERE NOT EXISTS(\n"
@@ -142,7 +141,7 @@ do
             minmaxlist=(${minmaxdiff[${dataset}]})
 
             echo -n "creating ${filename} ... "
-
+            
             touch $creation_path
 
             sql_query="SELECT \* FROM ${database}.${dataset} AS o WHERE NOT EXISTS(\n"
@@ -214,7 +213,7 @@ do
                 minmaxlist=(${minmaxdiff[${dataset}]})
 
                 echo -n "creating ${filename} ... "
-
+                
                 touch $creation_path
 
                 sql_query="SELECT \* FROM ${database}.${dataset} SKYLINE OF "
@@ -272,7 +271,7 @@ do
             minmaxlist=(${minmaxdiff[${dataset}]})
 
             echo -n "creating ${filename} ... "
-
+            
             touch $creation_path
 
             sql_query="SELECT \* FROM ${database}.${dataset} SKYLINE OF\n"

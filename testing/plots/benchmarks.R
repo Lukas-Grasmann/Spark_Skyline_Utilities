@@ -9,6 +9,8 @@ library('tikzDevice')
 cbbPalette <- c('#000000', '#E69F00', '#56B4E9', '#009E73', '#F0E442',
                 '#0072B2', '#D55E00', '#CC79A7', '#ff00ff', '#666666')
 
+names(cbbPalette) <- as.factor(c('reference', 'dist', 'dist_inc', 'bnl'))
+
 # load and preprocess data
 report.raw <- read.csv('data/output.csv')
 # convert all columns to factors where sensible
@@ -66,7 +68,7 @@ for (report.iter in report.dimensions_vs_time) {
     # scale_y_continuous(trans = log10_trans()) +
     theme(legend.position = 'right',
           legend.direction = 'vertical') +
-    scale_color_manual(values=cbbPalette, name='Algorithm')
+    scale_color_manual(values=cbbPalette, name='Algorithm', drop = TRUE, limits = force)
 
   ggsave(paste(
     'dimension_vs_time', '-',
@@ -82,7 +84,7 @@ for (report.iter in report.size_vs_time) {
   dimensions <- report.iter$dimensions[[1]]
   nodes <- report.iter$nodes[[1]]
   # dataset <- report.iter$dataset[[1]]
-  
+
   plot <- ggplot(
     data = report.iter,
     aes(x=size, y=time, group=algorithm))+
@@ -96,14 +98,14 @@ for (report.iter in report.size_vs_time) {
               # paste('dataset', dataset, sep=': '),
               sep = ', ')) +
     labs(x='dataset size', y='time [s]')
-  
+
   plot.log <- plot +
     # scale_y_continuous(trans = log10_trans()) +
     theme(legend.position = 'right',
           axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
           legend.direction = 'vertical') +
-    scale_color_manual(values=cbbPalette, name='Algorithm')
-  
+    scale_color_manual(values=cbbPalette, name='Algorithm', drop = TRUE, limits = force)
+
   ggsave(paste(
     'size_vs_time', '-',
     gsub(' ', '_', dataset), '-',
@@ -120,7 +122,7 @@ for (report.iter in report.nodes_vs_time) {
   dimensions <- report.iter$dimensions[[1]]
   size <- report.iter$size[[1]]
   dataset <- report.iter$dataset[[1]]
-  
+
   plot <- ggplot(
     data = report.iter,
     aes(x=nodes, y=time, group=algorithm)) +
@@ -134,13 +136,13 @@ for (report.iter in report.nodes_vs_time) {
               paste('dataset', dataset, sep=': '),
               sep = ', ')) +
     labs(x='number of nodes', y='time [s]')
-  
+
   plot.log <- plot +
     # scale_y_continuous(trans = log10_trans()) +
     theme(legend.position = 'right',
           legend.direction = 'vertical') +
-    scale_color_manual(values=cbbPalette, name='Algorithm')
-  
+    scale_color_manual(values=cbbPalette, name='Algorithm', drop = TRUE, limits = force)
+
   ggsave(paste(
     'nodes_vs_time', '-',
     gsub(' ', '_', dataset), '-',

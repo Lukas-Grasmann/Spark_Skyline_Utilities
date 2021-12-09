@@ -15,7 +15,7 @@
 database="benchmarks"
 
 # run_args="--conf spark.sql.catalogImplementation=hive --conf spark.sql.warehouse.dir=/home/lukas/test_cases_updated/benchmarks/spark-warehouse"
-run_args="--master spark://url:7077 --conf spark.sql.catalogImplementation=hive --conf driver-memory=16g"
+run_args="--master spark://url:7077 --conf spark.sql.catalogImplementation=hive --conf spark.executor.memory=2g"
 
 algorithms=("bnl" "dist" "dist_inc")
 datasets_complete=("store_sales_10 store_sales_20 store_sales_50")

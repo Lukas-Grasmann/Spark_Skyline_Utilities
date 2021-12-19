@@ -9,7 +9,7 @@
 #
 # All other files use one skyline algorithm via specialized skyline syntax to get the results.
 #
-# WARNING: For each dataset-dimensions combination there is excatly one reference solution.
+# WARNING: For each dataset-dimensions combination there is exactly one reference solution.
 # WARNING: There may be multiple skyline algorithms for this combination which all correspond to the **same** reference solution.
 
 database="benchmarks"

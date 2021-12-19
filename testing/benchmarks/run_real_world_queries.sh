@@ -9,13 +9,12 @@
 #
 # All other files use one skyline algorithm via specialized skyline syntax to get the results.
 #
-# WARNING: For each dataset-dimensions combination there is excatly one reference solution.
+# WARNING: For each dataset-dimensions combination there is exactly one reference solution.
 # WARNING: There may be multiple skyline algorithms for this combination which all correspond to the **same** reference solution.
 
 database="benchmarks"
 
-# run_args="--conf spark.sql.catalogImplementation=hive --conf spark.sql.warehouse.dir=/home/lukas/test_cases_updated/benchmarks/spark-warehouse"
-run_args="--master spark://url:7077 --conf spark.sql.catalogImplementation=hive --conf spark.executor.memory=2g"
+run_args="--master spark://lukas-VirtualBox:7077 --conf spark.sql.catalogImplementation=hive"
 
 algorithms=("bnl" "dist" "dist_inc")
 datasets_complete=("airbnb" "fueleconomy" "coil2000" "nba")
@@ -48,13 +47,13 @@ minmaxdiff[coil2000_incomplete]="MAX MIN MIN MAX MAX MAX"
 minmaxdiff[nba_incomplete]="MAX MIN MAX MAX MAX MAX"
 
 declare -A tuples
-tuples[airbnb]=8207699
-tuples[fueleconomy]=22277
+tuples[airbnb]=826838
+tuples[fueleconomy]=44071
 tuples[coil2000]=5822
 tuples[nba]=446
 
-tuples[airbnb_incomplete]=1193466
-tuples[fueleconomy_incomplete]=22491
+tuples[airbnb_incomplete]=1201556
+tuples[fueleconomy_incomplete]=44404
 tuples[coil2000_incomplete]=5822
 tuples[nba_incomplete]=446
 
@@ -71,7 +70,7 @@ do
     for dataset in ${datasets_complete[@]}
     do
         for dimension in ${num_dimensions[@]}
-        do
+        do  
             filename=reference-${dataset}-${tuples[${dataset}]}t-${dimension}d-${nodes}n.sql
             creation_path=${destination_folder}/${filename}
             absolute_path=$(realpath ${creation_path})
@@ -80,7 +79,7 @@ do
             minmaxlist=(${minmaxdiff[${dataset}]})
 
             echo -n "creating ${filename} ... "
-
+            
             touch $creation_path
 
             sql_query="SELECT \* FROM ${database}.${dataset} AS o WHERE NOT EXISTS(\n"
@@ -149,7 +148,7 @@ do
             minmaxlist=(${minmaxdiff[${dataset}]})
 
             echo -n "creating ${filename} ... "
-
+            
             touch $creation_path
 
             sql_query="SELECT \* FROM ${database}.${dataset} AS o WHERE NOT EXISTS(\n"
@@ -221,7 +220,7 @@ do
                 minmaxlist=(${minmaxdiff[${dataset}]})
 
                 echo -n "creating ${filename} ... "
-
+                
                 touch $creation_path
 
                 sql_query="SELECT \* FROM ${database}.${dataset} SKYLINE OF "
@@ -279,7 +278,7 @@ do
             minmaxlist=(${minmaxdiff[${dataset}]})
 
             echo -n "creating ${filename} ... "
-
+            
             touch $creation_path
 
             sql_query="SELECT \* FROM ${database}.${dataset} SKYLINE OF\n"

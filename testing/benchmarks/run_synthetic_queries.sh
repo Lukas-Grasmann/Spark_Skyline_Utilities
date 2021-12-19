@@ -9,12 +9,12 @@
 #
 # All other files use one skyline algorithm via specialized skyline syntax to get the results.
 #
-# WARNING: For each dataset-dimensions combination there is exactly one reference solution.
+# WARNING: For each dataset-dimensions combination there is excatly one reference solution.
 # WARNING: There may be multiple skyline algorithms for this combination which all correspond to the **same** reference solution.
 
 database="benchmarks"
 
-run_args="--master spark://lukas-VirtualBox:7077 --conf spark.sql.catalogImplementation=hive"
+run_args="--master spark://lukas-VirtualBox:7077 --conf spark.sql.catalogImplementation=hive --conf spark.executor.processTreeMetrics.enabled=true --conf spark.executor.metrics.pollingInterval=10"
             
 algorithms=("bnl" "dist" "dist_inc")
 datasets_complete=("store_sales_10 store_sales_20 store_sales_50")

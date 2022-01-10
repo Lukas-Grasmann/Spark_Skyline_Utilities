@@ -1,5 +1,6 @@
 library('dplyr')
 library('readr')
+library('tidyr')
 
 # define size of test sample
 test_sample_size = 25000L
@@ -10,11 +11,15 @@ input_dir.fueleconomy ='../input/fueleconomy/'
 input_dir.coil2000 = '../input/coil2000/'
 input_dir.nba = '../input/nba/'
 
+input_dir.store_sales = '../input/store_sales/'
+
 # define output directory paths
 output_dir.airbnb ='../output/airbnb/'
 output_dir.fueleconomy ='../output/fueleconomy/'
 output_dir.coil2000 = '../output/coil2000/'
 output_dir.nba = '../output/nba/'
+
+output_dir.store_sales = '../output/store_sales/'
 
 # define auxiliary output directories
 output_dir.airbnb.aux <- paste(output_dir.airbnb, 'cities/', sep='')
@@ -223,3 +228,18 @@ write_csv(df.nba, paste(output_dir.nba, 'nba_incomplete.csv', sep=''), na='')
 
 write_csv(df.nba.complete.test, paste(output_dir.nba, 'nba_test.csv', sep=''), na='')
 write_csv(df.nba.test, paste(output_dir.nba, 'nba_incomplete_test.csv', sep=''), na='')
+
+df.store_sales.incomplete <- read.csv(paste(input_dir.store_sales, 'store_sales.csv', sep=''))
+df.store_sales.complete <-df.store_sales.incomplete %>%
+  drop_na(ss_quantity, ss_wholesale_cost, ss_list_price,
+          ss_sales_price, ss_ext_discount_amt, ss_ext_sales_price)
+
+write_csv(df.store_sales.incomplete %>% slice_head(n = 1e+06), paste(output_dir.store_sales, 'store_sales_incomplete_1M.csv', sep=''), na='')
+write_csv(df.store_sales.incomplete %>% slice_head(n = 2e+06), paste(output_dir.store_sales, 'store_sales_incomplete_2M.csv', sep=''), na='')
+write_csv(df.store_sales.incomplete %>% slice_head(n = 5e+06), paste(output_dir.store_sales, 'store_sales_incomplete_5M.csv', sep=''), na='')
+write_csv(df.store_sales.incomplete %>% slice_head(n = 10e+06), paste(output_dir.store_sales, 'store_sales_incomplete_10M.csv', sep=''), na='')
+
+write_csv(df.store_sales.complete %>% slice_head(n = 1e+06), paste(output_dir.store_sales, 'store_sales_1M.csv', sep=''), na='')
+write_csv(df.store_sales.complete %>% slice_head(n = 2e+06), paste(output_dir.store_sales, 'store_sales_2M.csv', sep=''), na='')
+write_csv(df.store_sales.complete %>% slice_head(n = 5e+06), paste(output_dir.store_sales, 'store_sales_5M.csv', sep=''), na='')
+write_csv(df.store_sales.complete %>% slice_head(n = 10e+06), paste(output_dir.store_sales, 'store_sales_10M.csv', sep=''), na='')

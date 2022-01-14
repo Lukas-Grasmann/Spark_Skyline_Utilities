@@ -17,6 +17,8 @@ database="benchmarks"
 run_args="--master yarn \
 --deploy-mode client \
 --conf spark.sql.catalogImplementation=hive \
+--executor-cores 20 \
+--executor-memory 2g \
 --conf spark.executor.processTreeMetrics.enabled=true \
 --conf spark.executor.metrics.pollingInterval=10 \
 --conf spark.executor.heartbeatInterval=1000"

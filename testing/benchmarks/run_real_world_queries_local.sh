@@ -46,13 +46,13 @@ minmaxdiff[coil2000_incomplete]="MAX MIN MIN MAX MAX MAX"
 minmaxdiff[nba_incomplete]="MAX MIN MAX MAX MAX MAX"
 
 declare -A tuples
-tuples[airbnb]=826838
-tuples[fueleconomy]=44071
+tuples[airbnb]=820698
+tuples[fueleconomy]=22276
 tuples[coil2000]=5822
 tuples[nba]=446
 
-tuples[airbnb_incomplete]=1201556
-tuples[fueleconomy_incomplete]=44404
+tuples[airbnb_incomplete]=1193465
+tuples[fueleconomy_incomplete]=22490
 tuples[coil2000_incomplete]=5822
 tuples[nba_incomplete]=446
 

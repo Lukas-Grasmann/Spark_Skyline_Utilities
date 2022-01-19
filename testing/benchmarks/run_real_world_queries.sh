@@ -128,7 +128,7 @@ do
 
             /.${SPARK_HOME}/bin/spark-sql \
                 ${run_args} \
-                --executor-cores ${nodes} \
+                --total-executor-cores ${nodes} \
                 -f ${absolute_path} \
                 &> ${output_path}
 
@@ -197,7 +197,7 @@ do
 
             /.${SPARK_HOME}/bin/spark-sql \
                 ${run_args} \
-                --executor-cores ${nodes} \
+                --total-executor-cores ${nodes} \
                 -f ${absolute_path} \
                 &> ${output_path}
 
@@ -257,7 +257,7 @@ do
 
                 /.${SPARK_HOME}/bin/spark-sql \
                     ${run_args} \
-                    --executor-cores ${nodes} \
+                    --total-executor-cores ${nodes} \
                     -f ${absolute_path} \
                     &> ${output_path}
 
@@ -307,7 +307,7 @@ do
 
             /.${SPARK_HOME}/bin/spark-sql \
                 ${run_args} \
-                --executor-cores ${nodes} \
+                --total-executor-cores ${nodes} \
                 -f ${absolute_path} \
                 &> ${output_path}
 

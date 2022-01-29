@@ -9,18 +9,25 @@ library('tikzDevice')
 cbbPalette <- c('#000000', '#E69F00', '#56B4E9', '#009E73', '#F0E442',
                 '#0072B2', '#D55E00', '#CC79A7', '#ff00ff', '#666666')
 
-names(cbbPalette) <- as.factor(c('reference', 'dist', 'dist_inc', 'bnl'))
+names(cbbPalette) <- as.factor(c('Reference', 'Distributed Complete', 'Distributed Incomplete', 'Block-Nested-Loop'))
+
+nodes_text = 'Nodes'
 
 # load and preprocess data
-report.raw <- read.csv('data/output_real_world_memory.csv')
+report.raw <- read.csv('data/output.csv') %>%
+  mutate(algorithm=replace(algorithm, algorithm=='reference', 'Reference')) %>%
+  mutate(algorithm=replace(algorithm, algorithm=='bnl', 'Block-Nested-Loop')) %>%
+  mutate(algorithm=replace(algorithm, algorithm=='dist_inc', 'Distributed Incomplete')) %>%
+  mutate(algorithm=replace(algorithm, algorithm=='dist', 'Distributed Complete'))
 # convert all columns to factors where sensible
 report.factor <- report.raw %>%
   # convert all character columns to factors
   mutate_if(sapply(report.raw, is.character), as.factor) %>%
+  mutate(memory = memory / (1024^2))
   # convert the dimension column to factors (limited number of options)
-  mutate(dimensions = as.factor(dimensions)) %>%
+  # mutate(dimensions = as.factor(dimensions)) %>%
   # convert the nodes column to factors (limited number of options)
-  mutate(nodes = as.factor(nodes))
+  # mutate(nodes = as.factor(nodes))
   # convert the size column to factors (limited number of options)
   # mutate(size = as.factor(size))
 
@@ -69,7 +76,7 @@ for (report.iter in report.dimensions_vs_time) {
   size <- report.iter$size[[1]]
   nodes <- report.iter$nodes[[1]]
   dataset <- report.iter$dataset[[1]]
-
+  
   plot <- ggplot(
     data = report.iter,
     aes(x=dimensions, y=time, group=algorithm)) +
@@ -77,15 +84,20 @@ for (report.iter in report.dimensions_vs_time) {
     geom_point(size=1.3, aes(color=algorithm)) +
     ggtitle('Benchmark Dimension vs. Execution Time',
             subtitle = paste(
-              query,
-              paste('size', size, sep=': '),
-              paste('nodes', nodes, sep=': '),
-              paste('dataset', dataset, sep=': '),
-              sep = ', ')) +
-    labs(x='number of dimensions', y='time [s]')
-
+              paste('Input Tuples', size, sep=': '),
+              paste(paste('Number of', nodes_text, sep=' '), nodes, sep=': '),
+              paste('Dataset', dataset, sep=': '),
+              sep = ' | ')) +
+    labs(x='Number of Dimensions', y='Execution Time [s]') +
+    theme_bw() +
+    theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5))
+  
   plot.log <- plot +
-    # scale_y_continuous(trans = log10_trans()) +
+    scale_x_continuous(
+      breaks = c(sort(unique(report.iter$dimensions))),
+      labels = c(sort(unique(report.iter$dimensions)))) +
+    scale_y_continuous(trans = log10_trans()) +
+    expand_limits(y = 0) +
     theme(legend.position = 'right',
           legend.direction = 'vertical') +
     scale_color_manual(values=cbbPalette, name='Algorithm', drop = TRUE, limits = force)
@@ -112,15 +124,20 @@ for (report.iter in report.dimensions_vs_memory) {
     geom_point(size=1.3, aes(color=algorithm)) +
     ggtitle('Benchmark Dimension vs. Memory Consumption',
             subtitle = paste(
-              query,
-              paste('size', size, sep=': '),
-              paste('nodes', nodes, sep=': '),
-              paste('dataset', dataset, sep=': '),
-              sep = ', ')) +
-    labs(x='number of dimensions', y='memory consumption [bytes]')
+              paste('Input Tuples', size, sep=': '),
+              paste(paste('Number of', nodes_text, sep=' '), nodes, sep=': '),
+              paste('Dataset', dataset, sep=': '),
+              sep = ' | ')) +
+    labs(x='Number of Dimensions', y='Peak Memory Consumption [MB]') +
+    theme_bw() +
+    theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5))
   
   plot.log <- plot +
-    # scale_y_continuous(trans = log10_trans()) +
+    scale_x_continuous(
+      breaks = c(sort(unique(report.iter$dimensions))),
+      labels = c(sort(unique(report.iter$dimensions)))) +
+    scale_y_continuous(trans = log10_trans()) +
+    expand_limits(y = 0) +
     theme(legend.position = 'right',
           legend.direction = 'vertical') +
     scale_color_manual(values=cbbPalette, name='Algorithm', drop = TRUE, limits = force)
@@ -147,15 +164,18 @@ for (report.iter in report.size_vs_time) {
     geom_point(size=1.3, aes(color=algorithm)) +
     ggtitle('Benchmark Size vs. Execution Time',
             subtitle = paste(
-              query,
-              paste('dimensions', dimensions, sep=': '),
-              paste('nodes', nodes, sep=': '),
+              paste('Skyline Dimensions', dimensions, sep=': '),
+              paste(paste('Number of', nodes_text, sep=' '), nodes, sep=': '),
               # paste('dataset', dataset, sep=': '),
-              sep = ', ')) +
-    labs(x='dataset size', y='time [s]')
+              sep = ' | ')) +
+    labs(x='Dataset Size [MB]', y='Execution Time [s]') +
+    theme_bw() +
+    theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5))
 
   plot.log <- plot +
-    # scale_y_continuous(trans = log10_trans()) +
+    scale_x_continuous(trans = log10_trans()) +
+    scale_y_continuous(trans = log10_trans()) +
+    expand_limits(x = 0, y = 0) +
     theme(legend.position = 'right',
           axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
           legend.direction = 'vertical') +
@@ -183,15 +203,18 @@ for (report.iter in report.size_vs_memory) {
     geom_point(size=1.3, aes(color=algorithm)) +
     ggtitle('Benchmark Size vs. Memory Consumption',
             subtitle = paste(
-              query,
-              paste('dimensions', dimensions, sep=': '),
-              paste('nodes', nodes, sep=': '),
+              paste('Skyline Dimensions', dimensions, sep=': '),
+              paste(paste('Number of', nodes_text, sep=' '), nodes, sep=': '),
               # paste('dataset', dataset, sep=': '),
-              sep = ', ')) +
-    labs(x='dataset size', y='memory consumption [bytes]')
+              sep = ' | ')) +
+    labs(x='Dateset Size [MB]', y='Peak Memory Consumption [MB]') +
+    theme_bw() +
+    theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5))
   
   plot.log <- plot +
-    # scale_y_continuous(trans = log10_trans()) +
+    scale_x_continuous(trans = log10_trans()) +
+    scale_y_continuous(trans = log10_trans()) +
+    expand_limits(x = 0, y = 0) +
     theme(legend.position = 'right',
           axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
           legend.direction = 'vertical') +
@@ -219,17 +242,22 @@ for (report.iter in report.nodes_vs_time) {
     aes(x=nodes, y=time, group=algorithm)) +
     geom_line(size=1.1, aes(color=algorithm)) +
     geom_point(size=1.3, aes(color=algorithm)) +
-    ggtitle('Benchmark Nodes vs. Execution Time',
+    ggtitle(paste('Number of ', nodes_text, ' vs. Execution Time', sep=''),
             subtitle = paste(
-              query,
-              paste('dimensions', dimensions, sep=': '),
-              paste('size', size, sep=': '),
-              paste('dataset', dataset, sep=': '),
-              sep = ', ')) +
-    labs(x='number of nodes', y='time [s]')
+              paste('Skyline Dimensions', dimensions, sep=': '),
+              paste('Input Tuples', size, sep=': '),
+              paste('Dataset', dataset, sep=': '),
+              sep = ' | ')) +
+    labs(x=paste('Number of ', nodes_text, sep=''), y='Execution Time [s]') +
+    theme_bw() +
+    theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5))
 
   plot.log <- plot +
-    # scale_y_continuous(trans = log10_trans()) +
+    scale_x_continuous(
+      breaks = seq(min(report.iter$nodes), max(report.iter$nodes)),
+      labels = seq(min(report.iter$nodes), max(report.iter$nodes))) +
+    scale_y_continuous(trans = log10_trans()) +
+    expand_limits(y = 0) +
     theme(legend.position = 'right',
           legend.direction = 'vertical') +
     scale_color_manual(values=cbbPalette, name='Algorithm', drop = TRUE, limits = force)
@@ -254,17 +282,22 @@ for (report.iter in report.nodes_vs_memory) {
     aes(x=nodes, y=memory, group=algorithm)) +
     geom_line(size=1.1, aes(color=algorithm)) +
     geom_point(size=1.3, aes(color=algorithm)) +
-    ggtitle('Benchmark Nodes vs. Memory Consumption',
+    ggtitle(paste('Number of ', nodes_text, ' vs. Memory Consumption', sep=''),
             subtitle = paste(
-              query,
-              paste('dimensions', dimensions, sep=': '),
-              paste('size', size, sep=': '),
-              paste('dataset', dataset, sep=': '),
-              sep = ', ')) +
-    labs(x='number of nodes', y='memory consumption [bytes]')
+              paste('Skyline Dimensions', dimensions, sep=': '),
+              paste('Input Tuples', size, sep=': '),
+              paste('Dataset', dataset, sep=': '),
+              sep = ' | ')) +
+    labs(x=paste('Number of ', nodes_text, sep=''), y='Peak Memory Consumption [MB]') +
+    theme_bw() +
+    theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5))
   
   plot.log <- plot +
-    # scale_y_continuous(trans = log10_trans()) +
+    scale_x_continuous(
+      breaks = seq(min(report.iter$nodes), max(report.iter$nodes)),
+      labels = seq(min(report.iter$nodes), max(report.iter$nodes))) +
+    scale_y_continuous(trans = log10_trans()) +
+    expand_limits(y = 0) +
     theme(legend.position = 'right',
           legend.direction = 'vertical') +
     scale_color_manual(values=cbbPalette, name='Algorithm', drop = TRUE, limits = force)

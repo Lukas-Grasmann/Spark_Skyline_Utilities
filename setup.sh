@@ -1,5 +1,32 @@
 #!/bin/bash
 
+# This script is responsible for downloading Spark including Skyline Queries form an URL and installing dependencies
+# such that it can run on a clean Ubuntu installation.
+#
+# This program offers the following arguments:
+# basic OR install
+# - install dependencies and automatically clone the repository
+# - automatically rename the cloned repository such that all other arguments are working
+#
+# maven
+# - build Spark found in "Spark_${SPARK_VERSION}" using maven
+# sbt OR build
+# - build Spark found in "Spark_${SPARK_VERSION}" using sbt (recommended)
+# runnable
+# - build a runnable from the source
+# - similar to the distributions normally downloaded from official Spark sources
+#
+# jekyll
+# - install jekyll and build using jekyll
+# - includes compilation of documentation
+#
+# antlr
+# - Install ANTLR for developing the grammar used by Spark SQL
+#
+# jupyter
+# - install JUPYTER
+# - modify .bashrc as needed using the commands in the comments associated with this option
+
 SPARK_VERSION="3.1.2"
 SPARK_DOWNLOAD_URL="https://github.com/Lukas-Grasmann/Spark_3.1.2_Skyline.git"
 
@@ -133,9 +160,9 @@ then
     sudo Rscript -e 'devtools::install_version("roxygen2", version = "7.1.1", repos="https://cloud.r-project.org/")'
 
     sudo Rscript -e 'install.packages(c("e1071", "qpdf"), repos="https://cloud.r-project.org/")'
-    
+
     ./dev/make-distribution.sh --name skyline-spark --pip --r --tgz -Psparkr -Phive -Phive-thriftserver -Pmesos -Pyarn -Dhadoop.version=3.0.0 -Pkubernetes
-    
+
 fi
 
 if [[ $1 == "jekyll" ]]

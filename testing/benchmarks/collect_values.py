@@ -1,4 +1,4 @@
-# librarie(s) for accessing system functions (file system and shell commands)
+# libraries for accessing system functions (file system and shell commands)
 import os
 import sys
 from re import findall
@@ -45,7 +45,7 @@ for subdir, dirs, filenames in os.walk(path):
 
                 # find application id from file
                 app_id = findall(r"Application Id: (.*)", data)
-                
+
                 if len(app_id) != 1:
                     pass
                 else:
@@ -88,7 +88,7 @@ for subdir, dirs, filenames in os.walk(path):
                                     total_memory += peak_memory_metrics['JVMHeapMemory']
                                 if 'JVMOffHeapMemory' in peak_memory_metrics:
                                     total_memory += peak_memory_metrics['JVMOffHeapMemory']
-                            
+
                             # extract additional timing metrics from executor metrics
                             if 'executorRunTime' in executor:
                                 executor_run_time += executor['executorRunTime']

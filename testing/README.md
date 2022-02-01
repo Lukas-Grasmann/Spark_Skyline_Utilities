@@ -10,7 +10,18 @@ For the `R` script to work, the libraries `dplyr` and `readr` are needed.
 
 All output files ending with `test` belong to the tests while all other output files belong to the benchmarks.
 
-When copying the processed data for the Inside Airbnb dataset, note that only the files `airbnb.csv`, `airbnb_incomplete.csv`, and `airbnb_test.csv`, `airbnb_incomplete_test.csv` are currently used for benchmarking and testing respectively. All other files from the `cities` subfolder only contain partial results for each respective city/region which are not used in any test or benchmark currently.
+The input must be placed in the `input/<dataset>` folders with the following naming conventions:
+* Airbnb: Place the .csv files for each region/city in a `cities` subfolder in the input directory. The naming is irrelevant in this case
+* Fueleconomy: use `vehicles.csv`
+* COIL 2000: use `ticdata2000.txt`
+* NBA: use `stats.csv`
+* Store Sales (DSB): use `store_sales.csv`
+
+For the Airbnb dataset, note when copying the processed data for the Inside Airbnb dataset, note that only the files `airbnb.csv`, `airbnb_incomplete.csv`, and `airbnb_test.csv`, `airbnb_incomplete_test.csv` are currently used for benchmarking and testing respectively. All other files from the `cities` subfolder only contain partial results for each respective city/region which are not used in any test or benchmark currently.
+
+**NOTE: This repository does not contain the input .csv files to reduce size (down from several GB). Please add them manually from their respective sources.**
+
+Links to the datasets can be found in Planning.docx
 
 ## Testing
 
@@ -63,7 +74,7 @@ First, the database `benchmarks` must be created manually. For example, for a st
 
 ```
 ./spark-sql \
-    --master spark://lukas-VirtualBox:7077 \
+    --master spark://<address>:<port> \
     --conf spark.sql.catalogImplementation=hive
 ```
 
@@ -73,9 +84,17 @@ Followed by:
 CREATE DATABASE benchmarks;
 ```
 
-Subsequently, the tables can be created using the `setup.py` script. It can be fed directly into `spark-submit` and will create the corresponding tables.
+Subsequently, the tables can be created using the `setup.py` script. It can be fed directly into `spark-submit` and will create the corresponding tables. To create only the real-world datasets, use `setup_real_world.py` instead.
 
 **Additional setup may be needed depending on which datasources are used.**
+
+### Faster Setup Using HIVE
+
+When using HIVE as datasource, the files `hive_setup_real_world.sql` and `hive_setup_synthetic.sql` can be used instead of the setup using Spark.
+
+The files contain HiveQL queries which can also set up the database directly.
+
+Replace `input_home` in the .sql files to set the path of the input .csv files. Absolute paths may be preferable to prevent errors.
 
 ### Running the Benchmarks
 
@@ -86,7 +105,7 @@ For this to work, the environment variable `SPARK_HOME` must be set correctly. T
 For example, if the setup from above is used then `run_args` may look like this:
 
 ```
-run_args = "--master spark://lukas-VirtualBox:7077 --conf spark.sql.catalogImplementation=hive"
+run_args = "--master spark://<address>:<port> --conf spark.sql.catalogImplementation=hive"
 ```
 
 The output will of each query will be written in full to a text file in the `output` subfolder.
@@ -102,11 +121,31 @@ For this purpose, the script `collect_values.py` can be used. It assumes that th
 The filename
 
 ```
-reference-airbnb-1d.sql.out
+reference-airbnb-100t-1d-1n.sql.out
 ```
 
-is interpreted as the result of the `reference` algorithm on the `airbnb` dataset with `1` dimensional skyline.
+is interpreted as the result of the `reference` algorithm on the `airbnb` dataset of `100` tuples with a `1` dimensional skyline and `1` node.
 
-The script now finds the time by string matching using `r"Time taken: (\d*\.?\d+) seconds"` and generates a row of data.
+Note that the meaning of "node" may vary between benchmarks. It may refer to cores or executors instead.
 
-Once all files are processed, all such rows are written to an `_output.csv` file which is placed in the path which was passed to `collect_values.py`. This `.csv` file can then be used for further analysis and visualization.
+We could now find the execution time by string matching using `r"Time taken: (\d*\.?\d+) seconds"` and generates a row of data. Instead, we use the history server which must e running when using `collect_values.py`.
+
+For this, we extract the application id using `r"Application Id: (.*)"` and use the REST API of the history server as follows.
+
+Extract application metrics (e.g., duration):
+```
+response = requests.get(f"{history_server}/api/v1/applications/{app_id[0]}")
+```
+
+Extract the executor metrics (e.g., memory consumption):
+```
+response = requests.get(f"{history_server}/api/v1/applications/{app_id[0]}/executors")
+```
+
+Once all files are processed, all such rows are written to an `_output.csv` file which is placed in the path which was passed to `collect_values.py`. This `.csv` file can then be used for further analysis and visualization. Note that existing files of the same name will be overwritten.
+
+### Plotting the results
+
+The R-script `benchmarks.R` can be used to plot the data extracted in the previous step. It loads the data from `data/output.csv` which corresponds to a .csv file created by "collecting the results". The path can be replaced in the script.
+
+This script will automatically process the data from said file and output the plots as .png images in the **same** folder the R-script is in. Existing plots will be overwritten.

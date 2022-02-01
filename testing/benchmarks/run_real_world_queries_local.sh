@@ -14,7 +14,7 @@
 
 database="benchmarks"
 
-run_args="--master local[4] --conf spark.sql.catalogImplementation=hive"
+run_args="--master local[<cores>] --conf spark.sql.catalogImplementation=hive"
 
 algorithms=("bnl" "dist" "dist_inc")
 datasets_complete=("airbnb" "fueleconomy" "coil2000" "nba")

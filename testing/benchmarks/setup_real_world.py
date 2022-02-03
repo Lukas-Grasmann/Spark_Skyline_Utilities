@@ -1,8 +1,12 @@
+# Script for setting up only real-world databases using Spark directly
+# Can be run using spark-submit
+
 from pyspark.sql import SQLContext
 from pyspark import SparkContext
 
 from pyspark.sql.utils import AnalysisException
 
+# TODO: Replace with path to input home
 input_home = "/input_home/"       # terminate directory path by '/'
 
 airbnb_source = "airbnb.csv"

@@ -2,6 +2,8 @@
 
 # Use this file for generating queries for benchmarking and/or testing.
 # Each query will be put into a separate .sql file which may contain either skyline syntax or "plain" SQL.
+# All queries are also run directly using a yarn instance of Spark.
+# Executor cores and memory must be set (see TO-DO below).
 # Files are named according to their contents.
 #
 # All "reference" files contain play SQL and are generated for each potential skyline query in this file.
@@ -9,7 +11,7 @@
 #
 # All other files use one skyline algorithm via specialized skyline syntax to get the results.
 #
-# WARNING: For each dataset-dimensions combination there is excatly one reference solution.
+# WARNING: For each dataset-dimensions combination there is exactly one reference solution.
 # WARNING: There may be multiple skyline algorithms for this combination which all correspond to the **same** reference solution.
 
 database="benchmarks"
@@ -28,6 +30,7 @@ datasets_complete=("store_sales_10 store_sales_20 store_sales_50")
 datasets_incomplete=("store_sales_incomplete_10 store_sales_incomplete_20 store_sales_incomplete_50")
 
 num_dimensions=$(seq 1 6)
+# sequence of number of nodes to be used
 num_nodes=$(seq 1 2 5)
 
 declare -A dimensions

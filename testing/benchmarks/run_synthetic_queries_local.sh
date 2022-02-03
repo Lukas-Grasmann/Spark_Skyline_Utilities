@@ -2,6 +2,8 @@
 
 # Use this file for generating queries for benchmarking and/or testing.
 # Each query will be put into a separate .sql file which may contain either skyline syntax or "plain" SQL.
+# All queries are also run directly using Spark in local mode.
+# Number of cores must be configured (see TO-DO below). Should only be used for testing.
 # Files are named according to their contents.
 #
 # All "reference" files contain play SQL and are generated for each potential skyline query in this file.

@@ -2,7 +2,7 @@ library('dplyr')
 library('readr')
 library('tidyr')
 
-# define size of test sample
+# define size of test sample (can be modified)
 test_sample_size = 25000L
 
 # define input directory paths
@@ -25,7 +25,7 @@ output_dir.store_sales = '../output/store_sales/'
 output_dir.airbnb.aux <- paste(output_dir.airbnb, 'cities/', sep='')
 
 # define list of all output directories
-output_dirs = 
+output_dirs =
   c(output_dir.airbnb, output_dir.fueleconomy,
     output_dir.coil2000, output_dir.nba,
     output_dir.airbnb.aux)
@@ -135,7 +135,7 @@ col_def.airbnb <- cols(
 files.airbnb <- list.files(path=input_dir.airbnb, pattern='*.csv')
 lapply(files.airbnb, function(x) {
   df.airbnb <- read_csv(paste(input_dir.airbnb, x, sep=''), col_types = col_def.airbnb)
-  
+
   df.airbnb.selection <- df.airbnb %>% select(
     id,
     accommodates,                # maximum capacity
@@ -152,11 +152,11 @@ lapply(files.airbnb, function(x) {
     review_scores_value          # review score: value
   ) %>% mutate(price = parse_number(price)) %>%
     arrange(id)
-  
+
   write_csv(df.airbnb.selection, paste(output_dir.airbnb.aux, x, sep=''), na='')
 })
 
-df.airbnb <- list.files(path=output_dir.airbnb.aux, full.names = TRUE) %>% 
+df.airbnb <- list.files(path=output_dir.airbnb.aux, full.names = TRUE) %>%
   lapply(read_csv, col_types = col_def.airbnb) %>% bind_rows %>% arrange(id) %>% distinct()
 df.airbnb.complete <- na.omit(df.airbnb)
 

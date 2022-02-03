@@ -2,6 +2,8 @@
 
 # Use this file for generating queries for benchmarking and/or testing.
 # Each query will be put into a separate .sql file which may contain either skyline syntax or "plain" SQL.
+# All queries are also run directly using a standalone instance of spark.
+# Address and port must be configured (see TO-DO below).
 # Files are named according to their contents.
 #
 # All "reference" files contain play SQL and are generated for each potential skyline query in this file.
@@ -14,6 +16,7 @@
 
 database="benchmarks"
 
+# TODO: replace <address> and <port> by their corresponding values
 run_args="--master spark://<address>:<port> --conf spark.sql.catalogImplementation=hive --conf spark.executor.processTreeMetrics.enabled=true --conf spark.executor.metrics.pollingInterval=10"
 
 algorithms=("bnl" "dist" "dist_inc")

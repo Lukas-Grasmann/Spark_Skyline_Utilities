@@ -89,7 +89,7 @@ for (report.iter in report.dimensions_vs_time) {
               paste('Dataset', dataset, sep=': '),
               sep = ' | ')) +
     labs(x='Number of Dimensions', y='Execution Time [s]') +
-    theme_bw() +
+    theme_bw(base_size = 14) +
     theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5))
   
   plot.log <- plot +
@@ -108,7 +108,7 @@ for (report.iter in report.dimensions_vs_time) {
     gsub(' ', '_', query), '-',
     gsub(' ', '_', size), 't', '-',
     gsub(' ', '_', nodes), 'n',
-    '.png' , sep = ''), plot.log, width=10, height=4)
+    '.png' , sep = ''), plot.log, width=10, height=4, dpi=300)
 }
 
 for (report.iter in report.dimensions_vs_memory) {
@@ -129,7 +129,7 @@ for (report.iter in report.dimensions_vs_memory) {
               paste('Dataset', dataset, sep=': '),
               sep = ' | ')) +
     labs(x='Number of Dimensions', y='Peak Memory Consumption [MB]') +
-    theme_bw() +
+    theme_bw(base_size = 14) +
     theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5))
   
   plot.log <- plot +
@@ -148,7 +148,7 @@ for (report.iter in report.dimensions_vs_memory) {
     gsub(' ', '_', query), '-',
     gsub(' ', '_', size), 't', '-',
     gsub(' ', '_', nodes), 'n',
-    '.png' , sep = ''), plot.log, width=10, height=4)
+    '.png' , sep = ''), plot.log, width=10, height=4, dpi=300)
 }
 
 for (report.iter in report.size_vs_time) {
@@ -169,7 +169,7 @@ for (report.iter in report.size_vs_time) {
               # paste('dataset', dataset, sep=': '),
               sep = ' | ')) +
     labs(x='Dataset Size [MB]', y='Execution Time [s]') +
-    theme_bw() +
+    theme_bw(base_size = 14) +
     theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5))
 
   plot.log <- plot +
@@ -187,7 +187,7 @@ for (report.iter in report.size_vs_time) {
     gsub(' ', '_', query), '-',
     gsub(' ', '_', dimensions), 'd', '-',
     gsub(' ', '_', nodes), 'n',
-    '.png' , sep = ''), plot.log, width=10, height=4)
+    '.png' , sep = ''), plot.log, width=10, height=4, dpi=300)
 }
 
 for (report.iter in report.size_vs_memory) {
@@ -208,7 +208,7 @@ for (report.iter in report.size_vs_memory) {
               # paste('dataset', dataset, sep=': '),
               sep = ' | ')) +
     labs(x='Dateset Size [MB]', y='Peak Memory Consumption [MB]') +
-    theme_bw() +
+    theme_bw(base_size = 14) +
     theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5))
   
   plot.log <- plot +
@@ -226,7 +226,7 @@ for (report.iter in report.size_vs_memory) {
     gsub(' ', '_', query), '-',
     gsub(' ', '_', dimensions), 'd', '-',
     gsub(' ', '_', nodes), 'n',
-    '.png' , sep = ''), plot.log, width=10, height=4)
+    '.png' , sep = ''), plot.log, width=10, height=4, dpi=300)
 }
 
 options(scipen=99)
@@ -249,7 +249,7 @@ for (report.iter in report.nodes_vs_time) {
               paste('Dataset', dataset, sep=': '),
               sep = ' | ')) +
     labs(x=paste('Number of ', nodes_text, sep=''), y='Execution Time [s]') +
-    theme_bw() +
+    theme_bw(base_size = 14) +
     theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5))
 
   plot.log <- plot +
@@ -268,7 +268,7 @@ for (report.iter in report.nodes_vs_time) {
     gsub(' ', '_', query), '-',
     gsub(' ', '_', size), 't', '-',
     gsub(' ', '_', dimensions), 'd',
-    '.png', sep = ''), plot.log, width=10, height=4)
+    '.png', sep = ''), plot.log, width=10, height=4, dpi=300)
 }
 
 for (report.iter in report.nodes_vs_memory) {
@@ -289,7 +289,7 @@ for (report.iter in report.nodes_vs_memory) {
               paste('Dataset', dataset, sep=': '),
               sep = ' | ')) +
     labs(x=paste('Number of ', nodes_text, sep=''), y='Peak Memory Consumption [MB]') +
-    theme_bw() +
+    theme_bw(base_size = 14) +
     theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5))
   
   plot.log <- plot +
@@ -308,5 +308,5 @@ for (report.iter in report.nodes_vs_memory) {
     gsub(' ', '_', query), '-',
     gsub(' ', '_', size), 't', '-',
     gsub(' ', '_', dimensions), 'd',
-    '.png', sep = ''), plot.log, width=10, height=4)
+    '.png', sep = ''), plot.log, width=10, height=4, dpi=300)
 }

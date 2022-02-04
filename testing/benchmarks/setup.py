@@ -107,10 +107,10 @@ except AnalysisException as e:
 try:
     df_store_sales_incomplete = sqlContext.read.format('csv').options(header='true', inferschema='true').load(f"{input_home}{store_sales_incomplete_source}")
     df_store_sales_incomplete.registerTempTable("store_sales_incomplete")
-    sqlContext.sql(f"CREATE TABLE IF NOT EXISTS {database_name}.store_sales_incomplete_1 AS SELECT * FROM store_sales_incomplete LIMIT 1000000")
-    sqlContext.sql(f"CREATE TABLE IF NOT EXISTS {database_name}.store_sales_incomplete_2 AS SELECT * FROM store_sales_incomplete LIMIT 2000000")
-    sqlContext.sql(f"CREATE TABLE IF NOT EXISTS {database_name}.store_sales_incomplete_5 AS SELECT * FROM store_sales_incomplete LIMIT 5000000")
-    sqlContext.sql(f"CREATE TABLE IF NOT EXISTS {database_name}.store_sales_incomplete_10 AS SELECT * FROM store_sales_incomplete LIMIT 10000000")
+    sqlContext.sql(f"CREATE TABLE IF NOT EXISTS {database_name}.store_sales_1_incomplete AS SELECT * FROM store_sales_incomplete LIMIT 1000000")
+    sqlContext.sql(f"CREATE TABLE IF NOT EXISTS {database_name}.store_sales_2_incomplete AS SELECT * FROM store_sales_incomplete LIMIT 2000000")
+    sqlContext.sql(f"CREATE TABLE IF NOT EXISTS {database_name}.store_sales_5_incomplete AS SELECT * FROM store_sales_incomplete LIMIT 5000000")
+    sqlContext.sql(f"CREATE TABLE IF NOT EXISTS {database_name}.store_sales_10_incomplete AS SELECT * FROM store_sales_incomplete LIMIT 10000000")
 
     sqlContext.sql(f"CREATE TABLE IF NOT EXISTS {database_name}.store_sales_1 AS SELECT * FROM store_sales_incomplete \
                     WHERE ss_quantity IS NOT NULL AND \

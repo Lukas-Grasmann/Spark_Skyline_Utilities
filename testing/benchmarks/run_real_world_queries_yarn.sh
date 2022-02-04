@@ -32,7 +32,7 @@ datasets_incomplete=("airbnb_incomplete" "fueleconomy_incomplete"
 
 num_dimensions=$(seq 1 6)
 # sequence of number of nodes to be used
-num_nodes=$(seq 1 5)
+num_nodes=("1" "2" "3" "5" "10")
 
 declare -A dimensions
 dimensions[airbnb]="price accommodates bedrooms beds number_of_reviews review_scores_rating"
@@ -75,7 +75,7 @@ mkdir -p ${output_folder}
 
 data_folder="input/data"
 
-for nodes in ${num_nodes}
+for nodes in ${num_nodes[@]}
 do
     for dataset in ${datasets_complete[@]}
     do

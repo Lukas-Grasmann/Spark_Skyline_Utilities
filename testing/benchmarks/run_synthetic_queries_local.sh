@@ -19,38 +19,45 @@ database="benchmarks"
 run_args="--master local[<cores>] --conf spark.sql.catalogImplementation=hive"
 
 algorithms=("bnl" "dist" "dist_inc")
-datasets_complete=("store_sales_10 store_sales_20 store_sales_50")
-datasets_incomplete=("store_sales_incomplete_10 store_sales_incomplete_20 store_sales_incomplete_50")
+datasets_complete=("store_sales_1 store_sales_2 store_sales_5 store_sales_10")
+datasets_incomplete=("store_sales_1_incomplete store_sales_2_incomplete store_sales_5_incomplete store_sales_10_incomplete")
 
 num_dimensions=$(seq 1 6)
-num_nodes=$(seq 1 2 5)
+# sequence of number of nodes to be used
+num_nodes=("1" "2" "3" "5" "10")
 
 declare -A dimensions
+dimensions[store_sales_1]="ss_quantity ss_wholesale_cost ss_list_price ss_sales_price ss_ext_discount_amt ss_ext_sales_price"
+dimensions[store_sales_2]="ss_quantity ss_wholesale_cost ss_list_price ss_sales_price ss_ext_discount_amt ss_ext_sales_price"
+dimensions[store_sales_5]="ss_quantity ss_wholesale_cost ss_list_price ss_sales_price ss_ext_discount_amt ss_ext_sales_price"
 dimensions[store_sales_10]="ss_quantity ss_wholesale_cost ss_list_price ss_sales_price ss_ext_discount_amt ss_ext_sales_price"
-dimensions[store_sales_20]="ss_quantity ss_wholesale_cost ss_list_price ss_sales_price ss_ext_discount_amt ss_ext_sales_price"
-dimensions[store_sales_50]="ss_quantity ss_wholesale_cost ss_list_price ss_sales_price ss_ext_discount_amt ss_ext_sales_price"
 
-dimensions[store_sales_incomplete_10]="ss_quantity ss_wholesale_cost ss_list_price ss_sales_price ss_ext_discount_amt ss_ext_sales_price"
-dimensions[store_sales_incomplete_20]="ss_quantity ss_wholesale_cost ss_list_price ss_sales_price ss_ext_discount_amt ss_ext_sales_price"
-dimensions[store_sales_incomplete_50]="ss_quantity ss_wholesale_cost ss_list_price ss_sales_price ss_ext_discount_amt ss_ext_sales_price"
+dimensions[store_sales_1_incomplete]="ss_quantity ss_wholesale_cost ss_list_price ss_sales_price ss_ext_discount_amt ss_ext_sales_price"
+dimensions[store_sales_2_incomplete]="ss_quantity ss_wholesale_cost ss_list_price ss_sales_price ss_ext_discount_amt ss_ext_sales_price"
+dimensions[store_sales_5_incomplete]="ss_quantity ss_wholesale_cost ss_list_price ss_sales_price ss_ext_discount_amt ss_ext_sales_price"
+dimensions[store_sales_10_incomplete]="ss_quantity ss_wholesale_cost ss_list_price ss_sales_price ss_ext_discount_amt ss_ext_sales_price"
 
 declare -A minmaxdiff
+minmaxdiff[store_sales_1]="MAX MIN MIN MIN MAX MIN"
+minmaxdiff[store_sales_2]="MAX MIN MIN MIN MAX MIN"
+minmaxdiff[store_sales_5]="MAX MIN MIN MIN MAX MIN"
 minmaxdiff[store_sales_10]="MAX MIN MIN MIN MAX MIN"
-minmaxdiff[store_sales_20]="MAX MIN MIN MIN MAX MIN"
-minmaxdiff[store_sales_50]="MAX MIN MIN MIN MAX MIN"
 
-minmaxdiff[store_sales_incomplete_10]="MAX MIN MIN MIN MAX MIN"
-minmaxdiff[store_sales_incomplete_20]="MAX MIN MIN MIN MAX MIN"
-minmaxdiff[store_sales_incomplete_50]="MAX MIN MIN MIN MAX MIN"
+minmaxdiff[store_sales_1_incomplete]="MAX MIN MIN MIN MAX MIN"
+minmaxdiff[store_sales_2_incomplete]="MAX MIN MIN MIN MAX MIN"
+minmaxdiff[store_sales_5_incomplete]="MAX MIN MIN MIN MAX MIN"
+minmaxdiff[store_sales_10_incomplete]="MAX MIN MIN MIN MAX MIN"
 
 declare -A tuples
-tuples[store_sales_10]=1000000
-tuples[store_sales_20]=2000000
-tuples[store_sales_50]=5000000
+tuples[store_sales_1]=1000000
+tuples[store_sales_2]=2000000
+tuples[store_sales_5]=5000000
+tuples[store_sales_10]=10000000
 
-tuples[store_sales_incomplete_10]=1000000
-tuples[store_sales_incomplete_20]=2000000
-tuples[store_sales_incomplete_50]=5000000
+tuples[store_sales_1_incomplete]=1000000
+tuples[store_sales_2_incomplete]=2000000
+tuples[store_sales_5_incomplete]=5000000
+tuples[store_sales_10_incomplete]=10000000
 
 destination_folder="input/queries/synthetic"
 mkdir -p ${destination_folder}

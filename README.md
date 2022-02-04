@@ -19,6 +19,7 @@ The implementation can be found in: https://github.com/Lukas-Grasmann/Spark_3.1.
   * Some simple example for using skyline queries in Spark.
   * Jupyter files are already pre-executed to provide an example.
   * Contents of .sc and .py files can be run by copying parts to ``spark-shell`` or ``pyspark`` respectively.
+  * Code from Jupyter files can generally also be run using ``pyspark`` (beware not to recreate existing ``SparkContext``).
 * `testing`
   * **Refer to ``README.md`` in subfolder for more details.**
   * Scripts for setting up and running benchmarks of skyline queries in Spark SQL.

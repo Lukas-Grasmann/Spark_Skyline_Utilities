@@ -1,5 +1,5 @@
 // File with examples to be used in spark-shell (copy individually as needed)
-// TODO: replace <path> with the (absolute) path to the .csv files
+// TODO: replace <path> with the valid (absolute) path to the .csv data files
 
 val df = spark.read.options(Map("inferSchema"->"true","delimiter"->",","header"->"true")).csv("<path>/simple.csv")
 df.registerTempTable("simple")
